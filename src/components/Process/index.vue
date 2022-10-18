@@ -1,11 +1,12 @@
 <script>
+import '@/components/index.import.js';
 import FlowCard from "./FlowCard/index.vue";
 import PropPanel from "./PropPanel/index.vue";
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
 
 export default {
   name: 'Process',
-  props:['tabName', 'conf'],
+  props:['tabName', 'conf', 'formItemList', 'processConditions'],
   data() {
     let data = getMockData()
     if (typeof this.conf === 'object' && this.conf !== null) {
@@ -135,6 +136,8 @@ export default {
         <PropPanel
           value={this.activeData}
           processData={this.data}
+          formItemList={this.formItemList}
+          processConditions={this.processConditions}
           onConfirm={this.onPropEditConfirm}
           onCancel={this.onClosePanel}
         />

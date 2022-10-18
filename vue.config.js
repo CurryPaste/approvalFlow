@@ -16,7 +16,8 @@ module.exports = {
       stylus: {
         import: '~@/assets/style/global.styl'
       }
-    }
+    },
+    extract: false,
   },
   chainWebpack ( config ) {
     // set svg-sprite-loader

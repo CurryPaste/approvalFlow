@@ -2,9 +2,11 @@
   "name": "approval-flow",
   "version": "0.1.0",
   "private": true,
+  "main": "dist/approvalflow.common.js",
   "scripts": {
     "serve": "vue-cli-service serve --open",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "build:process": "vue-cli-service build --target lib --name approvalflow src/components/Process/index.vue"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -21,6 +23,7 @@
     "@vue/cli-plugin-babel": "~4.3.1",
     "@vue/cli-plugin-router": "~4.3.1",
     "@vue/cli-service": "~4.3.1",
+    "babel-plugin-component": "^1.1.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "svg-sprite-loader": "^4.1.6",

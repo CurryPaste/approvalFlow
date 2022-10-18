@@ -39,6 +39,8 @@
       <Process  
         ref="processDesign"
         :conf="mockData.processData"
+        :formItemList="formItemList"
+        :processConditions="processConditions"
         tabName="processDesign" 
         v-show="activeStep === 'processDesign'" 
         @startNodeChange="onStartChange"/>
@@ -83,7 +85,7 @@ export default {
   data() {
     return {
       mockData: null, // 可选择诸如 $route.param，Ajax获取数据等方式自行注入
-      activeStep: "basicSetting", // 激活的步骤面板
+      activeStep: "processDesign", // 激活的步骤面板
       steps: [
         { label: "基础设置", key: "basicSetting" },
         { label: "表单设计", key: "formDesign" },
@@ -103,10 +105,19 @@ export default {
   computed:{
     translateX () {
       return `translateX(${this.steps.findIndex(t => t.key === this.activeStep) * 100}%)`
+    },
+    formItemList() {
+      return this.$store.state.formItemList
+    },
+    processConditions() {
+      return this.$store.state.processConditions
     }
   },
   mounted() {
-    GET_MOCK_CONF().then(data => this.mockData = data);
+    GET_MOCK_CONF().then(data => {
+      this.mockData = data
+      console.log(data,' dddd')
+    });
   },
   methods: {
     changeSteps(item) {

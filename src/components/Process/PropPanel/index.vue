@@ -218,6 +218,7 @@ import Clickoutside from "element-ui/src/utils/clickoutside"
 import { NodeUtils } from "../FlowCard/util.js"
 import RowWrapper from './RowWrapper'
 import NumInput from "./NumInput"
+
 const rangeType = {
   'lt': '<',
   'lte':'≤',
@@ -235,7 +236,8 @@ const defaultApproverForm = {
   optionalRange: 'ALL', // USER<最多十个> / ALL / ROLE 
 }
 export default {
-  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData"],
+  props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", /**  */ "formItemList", /**  */"processConditions",],
+
   data() {
     return {
       fcOrgTabList:['dep', 'role', 'user', 'position'],
@@ -319,9 +321,6 @@ export default {
       // 发起人是默认就有得  所以需要加 1
       return this.pconditions.length - this.showingPCons.length + 1;
     },
-    usedFormItems(){
-      return this.$store.state.formItemList
-    }
   },
   directives: {
     Clickoutside
@@ -379,7 +378,8 @@ export default {
         res.push(data)
         Array.isArray(t.children) && format(t.children, t.label)
       })
-      const formItems = this.$store.state.formItemList.filter(t => t.cmpType !== 'custom')
+      console.log(this.formItemList, 'formItemList')
+      const formItems = this.formItemList?.filter(t => t.cmpType !== 'custom')
       format(formItems)
       return res
     },
@@ -546,7 +546,8 @@ export default {
     initConditionNodeData(){
       // 初始化条件表单数据
       let nodeConditions = this.value.properties && this.value.properties.conditions
-      this.pconditions = JSON.parse(JSON.stringify(this.$store.state.processConditions));
+      console.log(this.processConditions, 'processConditions')
+      this.pconditions = JSON.parse(JSON.stringify(this.processConditions || []));
       this.initiator['dep&user'] = this.value.properties.initiator
       if(Array.isArray(this.pconditions)){
         this.showingPCons = [-1] // 默认显示发起人
@@ -587,7 +588,7 @@ export default {
   },
   components: {
     "num-input": NumInput,
-    "row-wrapper": RowWrapper
+    "row-wrapper": RowWrapper,
   }
 };
 </script>
