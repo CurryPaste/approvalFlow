@@ -41,9 +41,12 @@
         :conf="mockData.processData"
         :formItemList="formItemList"
         :processConditions="processConditions"
+        :nodeTypeList="nodeTypeList"
         tabName="processDesign" 
         v-show="activeStep === 'processDesign'" 
-        @startNodeChange="onStartChange"/>
+        @startNodeChange="onStartChange"
+      >
+      </Process>
 
       <AdvancedSetting
         ref="advancedSetting"
@@ -91,15 +94,25 @@ export default {
         { label: "表单设计", key: "formDesign" },
         { label: "流程设计", key: "processDesign" },
         { label: "高级设置", key: "advancedSetting" }
+      ],
+      nodeTypeList: [
+        {
+          nodeName: 'node-1',
+          nodeIcon: () => this.$createElement('svg-icon', {props: {iconClass: "cascader", className: "iconfont", style: {color: 'red'}}}, ''),
+        },
+        {
+          nodeName: 'node-2',
+          nodeIcon: () => this.$createElement('div', '文本'),
+        },
       ]
     };
   },
   beforeRouteEnter(to, from, next){
-    window.addEventListener('beforeunload', beforeUnload)
+    // window.addEventListener('beforeunload', beforeUnload)
     next()
   },
   beforeRouteLeave(to, from, next){
-    window.removeEventListener('beforeunload', beforeUnload)
+    // window.removeEventListener('beforeunload', beforeUnload)
     next()
   },
   computed:{
@@ -114,6 +127,7 @@ export default {
     }
   },
   mounted() {
+    console.log()
     GET_MOCK_CONF().then(data => {
       this.mockData = data
       console.log(data,' dddd')

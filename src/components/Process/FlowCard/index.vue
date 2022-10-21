@@ -16,10 +16,10 @@ function createNormalCard(ctx, conf, h) {
       <header class="header">
         <div class="title-box" style="height: 100%;width:190px;">
           {isApprNode && (
-            <i class="iconfont iconshenpi" style="font-size:12px;color:white;margin-right:4px;"></i>
+            <svg-icon icon-class="shenpi" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
           )}
           {isCopyNode && (
-            <i class="el-icon-s-promotion" style="font-size:12px;color:white;margin-right:4px;"></i>
+            <svg-icon icon-class="chaosong" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
           )}
           <span class="title-text">{conf.properties.title}</span>
           {!isStartNode && (
@@ -122,28 +122,40 @@ function addNodeButton(ctx, data, h, isBranch = false) {
   return (
     <div class="add-node-btn-box flex  justify-center">
       <div class="add-node-btn">
-        <el-popover placement="right" trigger="click" width="300">
+        <el-popover placement="right" trigger="click">
           <div class="condition-box">
             <div>
               <div class="condition-icon" onClick={ctx.eventLancher.bind( ctx, "addApprovalNode",  data, isBranch )} >
-                <i class="iconfont iconshenpi"></i>
+                <svg-icon icon-class="shenpi" class-name="iconfont" />
               </div>
               审批人
             </div>
 
             <div>
               <div class="condition-icon" onClick={ctx.eventLancher.bind( ctx, "addCopyNode",  data, isBranch )} >
-                <i class="el-icon-s-promotion iconfont" style="vertical-align: middle;"></i>
+                <svg-icon icon-class="chaosong" class-name="iconfont" />
               </div>
               抄送人
             </div>
 
             <div>
               <div class="condition-icon" onClick={this.eventLancher.bind(ctx, "appendBranch", data, isBranch)}>
-                <i class="iconfont iconcondition"></i>
+                <svg-icon icon-class="fenzhi" class-name="iconfont" />
               </div>
               条件分支
             </div>
+
+            { ctx.nodeTypeList && ctx.nodeTypeList.map(node => {
+              return (
+                <div>
+                  <div class="condition-icon" onClick={ctx.eventLancher.bind( ctx, "addCopyNode",  data, isBranch )} >
+                    {node.nodeIcon && node.nodeIcon()}
+                  </div>
+                  {node.nodeName}
+                </div>
+              )
+            }) }
+
           </div>
 
           <button class="btn" type="button" slot="reference">
@@ -220,9 +232,15 @@ export default {
     data: { type: Object, required: true },
     // 点击发布时需要校验节点数据完整性 此时打开校验模式
     verifyMode: {type: Boolean, default: true},
+    nodeTypeList: { type: Array, required: false}, // nodeTypeList
   },
   watch:{
     
+  },
+  data() {
+    return {
+      
+    }
   },
   methods: {
     /**
@@ -236,6 +254,7 @@ export default {
     }
   },
   render(h) {
+    console.log(this, 'this')
     return (
       <div style="display: inline-flex; flex-direction: column; align-items: center;">
         {this.data && NodeFactory.call(this, this, this.data, h)}

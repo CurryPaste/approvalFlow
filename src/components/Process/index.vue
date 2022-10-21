@@ -6,7 +6,7 @@ import { NodeUtils, getMockData } from "./FlowCard/util.js";
 
 export default {
   name: 'Process',
-  props:['tabName', 'conf', 'formItemList', 'processConditions'],
+  props:['tabName', 'conf', 'formItemList', 'processConditions', 'nodeTypeList'],
   data() {
     let data = getMockData()
     if (typeof this.conf === 'object' && this.conf !== null) {
@@ -131,6 +131,7 @@ export default {
           key={this.updateId}
           data={this.data}
           onEmits={this.eventReciver}
+          nodeTypeList={this.nodeTypeList}
           style={{ transform: `scale(${this.scaleVal / 100})` }}
         />
         <PropPanel
