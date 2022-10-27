@@ -148,7 +148,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
             { ctx.nodeTypeList && ctx.nodeTypeList.map(node => {
               return (
                 <div>
-                  <div class="condition-icon" onClick={ctx.eventLancher.bind( ctx, "addCopyNode",  data, isBranch )} >
+                  <div class="condition-icon" onClick={ctx.eventLancher.bind( ctx, "addCustomNode", data, isBranch, node )} >
                     {node.nodeIcon && node.nodeIcon()}
                   </div>
                   {node.nodeName}
@@ -265,6 +265,4 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-@import 'index.styl';
-</style>
+<style lang="stylus" scoped src="./index.styl" />

@@ -41,16 +41,23 @@ export class NodeUtils {
   static isApproverNode ( node ) {
     return node && node.type === 'approver'
   }
+  static isCustomNode ( node ) {
+    return node && node.type === 'custom'
+  }
   /**
    * 创建指定节点
    * @param { String } type - 节点类型
    * @param { Object } previousNodeId - 父节点id
    * @returns { Object } 节点数据
    */
-  static createNode ( type, previousNodeId ) {
+  static createNode ( type, previousNodeId, nodeInfo = undefined ) {
     let res = JSON.parse( JSON.stringify( nodeConfig[type] ) )
     res.nodeId = this.idGenerator()
     res.prevId = previousNodeId
+    if (nodeInfo) {
+      res.content = nodeInfo.defaultContent
+      res.properties.title = nodeInfo.nodeName
+    }
     return res
   }
   /**
@@ -167,6 +174,30 @@ export class NodeUtils {
       this.deleteNode( oldChildNode, data )
     }
   }
+  /** 添加自定义节点 */
+  static addCustomNode ( data, isBranchAction, newChildNode = undefined, nodeInfo ) {
+    console.log(data, isBranchAction, newChildNode, 'ssss')
+    let oldChildNode = data.childNode;
+    newChildNode = newChildNode || this.createNode( "custom", data.nodeId, nodeInfo )
+    data.childNode = newChildNode
+    if ( oldChildNode ) {
+      newChildNode.childNode = oldChildNode
+      oldChildNode.prevId = newChildNode.nodeId
+    }
+    // let conditionNodes = data.conditionNodes
+    // if ( Array.isArray( conditionNodes ) && !isBranchAction && conditionNodes.length ) {
+    //   newChildNode.conditionNodes = conditionNodes.map( c => {
+    //     c.prevId = newChildNode.nodeId
+    //     return c
+    //   } )
+    //   delete data.conditionNodes
+    // }
+    // if ( oldChildNode && oldChildNode.type === 'empty' && newChildNode.type !== 'empty' && oldChildNode.conditionNodes.length === 0 ) {
+    //   this.deleteNode( oldChildNode, data )
+    // }
+    console.log(newChildNode, 'new child node')
+  }
+
   /**
    * 添加空节点
    * @param { Object } data - 空节点的父级节点

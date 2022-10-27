@@ -76,6 +76,7 @@ const beforeUnload = function (e) {
   (e || window.event).returnValue = confirmationMessage;     // Gecko and Trident
   return confirmationMessage;                                // Gecko and WebKit
 }
+import Modal from './comps/modal.vue'
 
 export default {
   name: "Home",
@@ -95,14 +96,29 @@ export default {
         { label: "流程设计", key: "processDesign" },
         { label: "高级设置", key: "advancedSetting" }
       ],
+      /**
+       * modalConfig - 还是填充vue文件
+       * 关键点在于保存和取消，取消要重置内容，保存要存两份-一份emit回data中，一部分保留在本组件中
+       */
       nodeTypeList: [
         {
           nodeName: 'node-1',
+          defaultContent: "这是一个新节点的content",
           nodeIcon: () => this.$createElement('svg-icon', {props: {iconClass: "cascader", className: "iconfont", style: {color: 'red'}}}, ''),
         },
         {
           nodeName: 'node-2',
+          defaultContent: "这是一个新节点2222的content",
           nodeIcon: () => this.$createElement('div', '文本'),
+          modalConfig: {
+            modalTemplete: () => this.$createElement(Modal, {}),
+            onOk: () => {
+              console.log('这是data成功')
+            },
+            onCancel: () => {
+              console.log('err')
+            }
+          }
         },
       ]
     };
