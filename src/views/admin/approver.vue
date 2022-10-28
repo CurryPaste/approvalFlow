@@ -101,22 +101,39 @@ export default {
        * 关键点在于保存和取消，取消要重置内容，保存要存两份-一份emit回data中，一部分保留在本组件中
        */
       nodeTypeList: [
+        // https://v2.cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0
         {
+          nodeKey: 'uniqueId1',
           nodeName: 'node-1',
           defaultContent: "这是一个新节点的content",
-          nodeIcon: () => this.$createElement('svg-icon', {props: {iconClass: "cascader", className: "iconfont", style: {color: 'red'}}}, ''),
+          color: "red",
+          titleIcon: (props) => this.$createElement('svg-icon', {props: {iconClass: "cascader", className: "iconfont", style: {color: 'red'}, ...props}}, ''),
+          nodeIcon: (props) => this.$createElement('svg-icon', {props: {iconClass: "cascader", className: "iconfont", style: {color: 'red'}, ...props}}, ''),
+          modalConfig: {
+            modalTemplete: () => this.$createElement('div', 'asdfasdfasdfasdfasdfasdfasdfasdf')
+          }
         },
         {
+          nodeKey: 'uniqueId2',
           nodeName: 'node-2',
           defaultContent: "这是一个新节点2222的content",
+          color: "rgba(0, 0, 0, 0.8)",
+          /** 考虑到大小可能不一样 */
+          titleIcon: (props) => this.$createElement('svg-icon', {props: {iconClass: "cascader", className: "iconfont", style: {color: 'red'}, ...props}}, ''),
           nodeIcon: () => this.$createElement('div', '文本'),
           modalConfig: {
-            modalTemplete: () => this.$createElement(Modal, {}),
-            onOk: () => {
-              console.log('这是data成功')
-            },
-            onCancel: () => {
-              console.log('err')
+            modalTemplete: () => this.$createElement(Modal, {props: {text: 'asdfasdfasdf'}}),
+            // TODO: 这里想用异步的方式控制按钮，需要将现在 modalTemplete的数据传过来，用来做相应的逻辑
+            onBeforeOk: (renderDomRef) => new Promise((resolve, reject) => {
+              console.log(' 1s后关闭', renderDomRef)
+              setTimeout(() => {
+                resolve()
+              }, 1000);
+            }),
+            // TODO: 这里也要获得 modalTemplete的数据
+            getContent: (renderDomRef) => {
+              console.log(renderDomRef, 'renderDomRef')
+              return '这是点击了保存之后的 content'
             }
           }
         },
@@ -146,7 +163,6 @@ export default {
     console.log()
     GET_MOCK_CONF().then(data => {
       this.mockData = data
-      console.log(data,' dddd')
     });
   },
   methods: {
