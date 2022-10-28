@@ -48,6 +48,7 @@ export class NodeUtils {
    * 创建指定节点
    * @param { String } type - 节点类型
    * @param { Object } previousNodeId - 父节点id
+   * @param { Object } nodeInfo - 自定义节点配置内容
    * @returns { Object } 节点数据
    */
   static createNode ( type, previousNodeId, nodeInfo = undefined ) {
@@ -57,6 +58,7 @@ export class NodeUtils {
     if (nodeInfo) {
       res.content = nodeInfo.defaultContent
       res.properties.title = nodeInfo.nodeName
+      res.customInfo = nodeInfo
     }
     return res
   }
@@ -176,9 +178,9 @@ export class NodeUtils {
   }
   /** 添加自定义节点 */
   static addCustomNode ( data, isBranchAction, nodeInfo ) {
-    console.log(data, isBranchAction, nodeInfo, 'ssss')
     let oldChildNode = data.childNode;
     let newChildNode = this.createNode( "custom", data.nodeId, nodeInfo )
+    /** 这部分代码和审批是一样的 S */
     data.childNode = newChildNode
     if ( oldChildNode ) {
       newChildNode.childNode = oldChildNode
@@ -195,7 +197,7 @@ export class NodeUtils {
     if ( oldChildNode && oldChildNode.type === 'empty' && newChildNode.type !== 'empty' && oldChildNode.conditionNodes.length === 0 ) {
       this.deleteNode( oldChildNode, data )
     }
-    console.log(newChildNode, 'new child node')
+    /** 这部分代码和审批是一样的 E */
   }
 
   /**
