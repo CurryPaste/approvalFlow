@@ -175,26 +175,26 @@ export class NodeUtils {
     }
   }
   /** 添加自定义节点 */
-  static addCustomNode ( data, isBranchAction, newChildNode = undefined, nodeInfo ) {
-    console.log(data, isBranchAction, newChildNode, 'ssss')
+  static addCustomNode ( data, isBranchAction, nodeInfo ) {
+    console.log(data, isBranchAction, nodeInfo, 'ssss')
     let oldChildNode = data.childNode;
-    newChildNode = newChildNode || this.createNode( "custom", data.nodeId, nodeInfo )
+    let newChildNode = this.createNode( "custom", data.nodeId, nodeInfo )
     data.childNode = newChildNode
     if ( oldChildNode ) {
       newChildNode.childNode = oldChildNode
       oldChildNode.prevId = newChildNode.nodeId
     }
-    // let conditionNodes = data.conditionNodes
-    // if ( Array.isArray( conditionNodes ) && !isBranchAction && conditionNodes.length ) {
-    //   newChildNode.conditionNodes = conditionNodes.map( c => {
-    //     c.prevId = newChildNode.nodeId
-    //     return c
-    //   } )
-    //   delete data.conditionNodes
-    // }
-    // if ( oldChildNode && oldChildNode.type === 'empty' && newChildNode.type !== 'empty' && oldChildNode.conditionNodes.length === 0 ) {
-    //   this.deleteNode( oldChildNode, data )
-    // }
+    let conditionNodes = data.conditionNodes
+    if ( Array.isArray( conditionNodes ) && !isBranchAction && conditionNodes.length ) {
+      newChildNode.conditionNodes = conditionNodes.map( c => {
+        c.prevId = newChildNode.nodeId
+        return c
+      } )
+      delete data.conditionNodes
+    }
+    if ( oldChildNode && oldChildNode.type === 'empty' && newChildNode.type !== 'empty' && oldChildNode.conditionNodes.length === 0 ) {
+      this.deleteNode( oldChildNode, data )
+    }
     console.log(newChildNode, 'new child node')
   }
 

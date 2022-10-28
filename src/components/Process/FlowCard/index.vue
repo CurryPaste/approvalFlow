@@ -11,6 +11,7 @@ function createNormalCard(ctx, conf, h) {
   const isStartNode = afterTrue(NodeUtils.isStartNode(conf), 'start-node')
   const isApprNode = afterTrue(NodeUtils.isApproverNode(conf), 'approver')
   const isCopyNode = afterTrue(NodeUtils.isCopyNode(conf), 'copy')
+  const isCustomNode = afterTrue(NodeUtils.isCustomNode(conf), 'custom')
   return (
     <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
       <header class="header">
@@ -19,6 +20,9 @@ function createNormalCard(ctx, conf, h) {
             <svg-icon icon-class="shenpi" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
           )}
           {isCopyNode && (
+            <svg-icon icon-class="chaosong" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
+          )}
+          {isCustomNode && (
             <svg-icon icon-class="chaosong" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
           )}
           <span class="title-text">{conf.properties.title}</span>
@@ -45,6 +49,7 @@ let nodes = {
   start: createFunc,
   approver: createFunc,
   copy: createFunc,
+  custom: createFunc,
   empty: _ => '',
   condition: function(ctx, conf, h) {
       // <i
@@ -170,6 +175,7 @@ function addNodeButton(ctx, data, h, isBranch = false) {
 function NodeFactory(ctx, data, h) {
   if (!data) return
   const showErrorTip = ctx.verifyMode && NodeUtils.checkNode(data) === false
+  console.log(data,' this is s isisisisisiis')
   let res = [],
     branchNode = "",
     selfNode = (
