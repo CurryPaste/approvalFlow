@@ -197,6 +197,12 @@
       <el-checkbox v-model="properties.userOptional">允许发起人自选抄送人</el-checkbox>
     </section>
 
+    <!-- 自定义 -->
+    <section  v-if="value && isCustomNode()" style="padding-left: 1rem;">
+      <div v-if="!value.customInfo.modalConfig.modalTemplete">暂无内容！</div>
+      <renderDom :render="customRenderFunc" ref="renderDomRef" />
+    </section>
+
     <el-dialog title="选择条件" :visible.sync="dialogVisible" width="500px" :append-to-body="true" custom-class="condition-dialog">
       <el-checkbox-group v-model="showingPCons">
         <!-- 发起人默认就有 -->
@@ -218,6 +224,7 @@ import Clickoutside from "element-ui/src/utils/clickoutside"
 import { NodeUtils } from "../FlowCard/util.js"
 import RowWrapper from './RowWrapper'
 import NumInput from "./NumInput"
+import renderDom from './renderDom.vue'
 
 const rangeType = {
   'lt': '<',
@@ -378,7 +385,7 @@ export default {
         res.push(data)
         Array.isArray(t.children) && format(t.children, t.label)
       })
-      console.log(this.formItemList, 'formItemList')
+      // console.log(this.formItemList, 'formItemList')
       const formItems = this.formItemList?.filter(t => t.cmpType !== 'custom')
       format(formItems)
       return res
@@ -471,12 +478,23 @@ export default {
       this.$emit("confirm", this.properties, content || '请设置审批人')
       this.visible = false
     },
+    /** 
+     * 自定义节点确认保存
+     */
+    customNodeComfirm() {
+      const { modalConfig, defaultContent } = this.value.customInfo;
+      console.log(this, this.$refs.renderDomRef, 'vvvvv', modalConfig)
+      let content = (modalConfig.getContent && modalConfig.getContent(this.$refs.renderDomRef)) || defaultContent || "";
+      this.$emit("confirm", this.properties, content)
+      this.visible = false
+    },
     // 确认修改
     confirm() {
       this.isCopyNode() && this.copyNodeConfirm()
       this.isStartNode() && this.startNodeComfirm()
       this.isApproverNode() && this.approverNodeComfirm()
       this.isConditionNode() && this.conditionNodeComfirm() 
+      this.isCustomNode() && this.customNodeComfirm()
     },
     // 关闭抽屉
     cancel() {
@@ -517,7 +535,14 @@ export default {
     },
 
     isCopyNode () {
-      return this.value ? NodeUtils.isCopyNode(this.value) : false
+      return this.value ? NodeUtils.isCopyNode(this.value) : false;
+    },
+
+    isCustomNode () {
+      return this.value ? NodeUtils.isCustomNode(this.value) : false;
+    },
+    customRenderFunc () {
+      return this.$createElement('span', 'default content')
     },
 
     initInitiator(){
@@ -546,7 +571,7 @@ export default {
     initConditionNodeData(){
       // 初始化条件表单数据
       let nodeConditions = this.value.properties && this.value.properties.conditions
-      console.log(this.processConditions, 'processConditions')
+      // console.log(this.processConditions, 'processConditions')
       this.pconditions = JSON.parse(JSON.stringify(this.processConditions || []));
       this.initiator['dep&user'] = this.value.properties.initiator
       if(Array.isArray(this.pconditions)){
@@ -578,6 +603,10 @@ export default {
 
     value(newVal) {
       if (newVal && newVal.properties) {
+        // console.log(this.value, 'vvvvvv', deepCopy, newVal.customInfo.modalConfig.modalTemplete())
+        if (NodeUtils.isCustomNode(newVal)) {
+          this.customRenderFunc = newVal.customInfo.modalConfig.modalTemplete;
+        }
         this.visible = true;
         this.properties = JSON.parse(JSON.stringify(newVal.properties));
         if (this.properties) {  
@@ -589,6 +618,7 @@ export default {
   components: {
     "num-input": NumInput,
     "row-wrapper": RowWrapper,
+    renderDom,
   }
 };
 </script>
