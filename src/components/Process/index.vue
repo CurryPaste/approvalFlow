@@ -3,6 +3,7 @@ import '@/components/index.import.js';
 import FlowCard from "./FlowCard/index.vue";
 import PropPanel from "./PropPanel/index.vue";
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
+import { IcreateNode } from './index.interface'
 
 export default {
   name: 'Process',
@@ -139,6 +140,7 @@ export default {
           processData={this.data}
           formItemList={this.formItemList}
           processConditions={this.processConditions}
+          nodeTypeList={this.nodeTypeList}
           onConfirm={this.onPropEditConfirm}
           onCancel={this.onClosePanel}
         />
