@@ -12,18 +12,19 @@ function createNormalCard(ctx, conf, h) {
   const isApprNode = afterTrue(NodeUtils.isApproverNode(conf), 'approver')
   const isCopyNode = afterTrue(NodeUtils.isCopyNode(conf), 'copy')
   const isCustomNode = afterTrue(NodeUtils.isCustomNode(conf), 'custom')
+  // TODO: 这里hover的效果还没坐上去，因为行内不能写伪类，这里要用鼠标事件配合响应式 动态style实现
   return (
-    <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)} >
-      <header class="header">
+    <section class={classList.join(' ')} onClick={this.eventLancher.bind(ctx, "edit", conf)}>
+      <header class="header" style={{'background-color': isCustomNode ? conf.customInfo.color : ''}}>
         <div class="title-box" style="height: 100%;width:190px;">
           {isApprNode && (
-            <svg-icon icon-class="shenpi" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
+            <svg-icon icon-class="shenpi" />
           )}
           {isCopyNode && (
-            <svg-icon icon-class="chaosong" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
+            <svg-icon icon-class="chaosong" />
           )}
           {isCustomNode && (
-            <svg-icon icon-class="chaosong" style="font-size:12px;color:white;margin:0 4px 6px 0;" />
+            conf.customInfo.titleIcon && conf.customInfo.titleIcon()
           )}
           <span class="title-text">{conf.properties.title}</span>
           {!isStartNode && (
@@ -175,7 +176,6 @@ function addNodeButton(ctx, data, h, isBranch = false) {
 function NodeFactory(ctx, data, h) {
   if (!data) return
   const showErrorTip = ctx.verifyMode && NodeUtils.checkNode(data) === false
-  console.log(data,' this is s isisisisisiis')
   let res = [],
     branchNode = "",
     selfNode = (
@@ -260,7 +260,6 @@ export default {
     }
   },
   render(h) {
-    console.log(this, 'this')
     return (
       <div style="display: inline-flex; flex-direction: column; align-items: center;">
         {this.data && NodeFactory.call(this, this, this.data, h)}

@@ -114,6 +114,8 @@ btn-bigger()
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.3);
   background #FFF
 
+  /** 节点配色 */
+
   &:hover {
     box-shadow: 0 0 0 2px #3296fa, 0 0 5px 4px rgba(0, 0, 0, 0.2);
   }
@@ -130,6 +132,15 @@ btn-bigger()
     }
     .header{
       background-color #ff9431
+    }
+  }
+
+  &.custom{
+    &:hover{
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 5px 4px rgba(0, 0, 0, 0.2);
+    }
+    .header{
+      background-color rgba(0, 0, 0, 0.8)
     }
   }
 
@@ -155,7 +166,8 @@ btn-bigger()
 
     .title-box {
       position: relative;
-      display: inline-block;
+      display: flex;
+      align-items: center;
       ellipsis(1)
     }
 
@@ -185,6 +197,7 @@ btn-bigger()
 
     .title-text {
       vertical-align: middle;
+      padding-left: 2px;
     }
 
     > .actions {
@@ -417,16 +430,18 @@ btn-bigger()
         font-size 12px
         cursor pointer
         margin 4px
+        display flex
+        justify-content center
+        align-items center
     
         .iconfont
             font-size 32px
-            margin-bottom 16px
         
         &:hover
             background #3296FA
             box-shadow 0 0 8px 4px rgba(0,0,0,.1)
             > .iconfont
-                color white
+                color white !important
 .relative
     position relative
 
