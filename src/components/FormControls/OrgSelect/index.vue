@@ -34,12 +34,14 @@
   </div>
 </template>
 <script>
+import formControlsCom from '@/components/mixins';
 export default {
   model:{
     prop: 'value',
     event: 'input'
   },
   name:'fc-org-select',
+  mixins: [formControlsCom],
   props:{
     value:{
       type: Object | null,

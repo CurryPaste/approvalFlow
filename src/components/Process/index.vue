@@ -1,5 +1,6 @@
 <script>
 import '@/components/index.import.js';
+import formControlsCom from '@/components/mixins';
 import FlowCard from "./FlowCard/index.vue";
 import PropPanel from "./PropPanel/index.vue";
 import { NodeUtils, getMockData } from "./FlowCard/util.js";
@@ -7,6 +8,7 @@ import { IcreateNode } from './index.interface'
 
 export default {
   name: 'Process',
+  mixins: [formControlsCom],
   props:['tabName', 'conf', 'formItemList', 'processConditions', 'nodeTypeList'],
   data() {
     let data = getMockData()

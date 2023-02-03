@@ -225,6 +225,7 @@ import { NodeUtils } from "../FlowCard/util.js"
 import RowWrapper from './RowWrapper'
 import NumInput from "./NumInput"
 import renderDom from './renderDom.vue'
+import formControlsCom from '@/components/mixins';
 
 const rangeType = {
   'lt': '<',
@@ -243,6 +244,7 @@ const defaultApproverForm = {
   optionalRange: 'ALL', // USER<最多十个> / ALL / ROLE 
 }
 export default {
+  mixins: [formControlsCom],
   props: [/*当前节点数据*/"value", /*整个节点数据*/"processData", /**  */ "formItemList", /**  */"processConditions",],
 
   data() {
